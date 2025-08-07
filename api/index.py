@@ -1,7 +1,7 @@
 import os
 import io
 import requests
-from llm import ChatGPT
+from api.llm import ChatGPT
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
