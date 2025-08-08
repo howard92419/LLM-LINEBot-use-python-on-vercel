@@ -84,7 +84,7 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(
-                text=f"助教:{reply_msg}", 
+                text=reply_msg, 
                 quick_reply=QuickReply(items=quick_reply_buttons)
             )
         )
