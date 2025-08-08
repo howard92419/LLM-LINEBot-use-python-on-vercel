@@ -75,7 +75,7 @@ def handle_message(event):
         reply_msg = chatgpt.get_response().replace("AI:", "", 1)
         chatgpt.add_msg(f"AI:{reply_msg}\n")
         
-        questions = ["了解更多", "出2個練習題", "相關觀念", "關閉AI"]
+        questions = ["了解更多", "出2個練習題","相關文獻", "相關觀念"]
         # 將追問問題設為 Quick Replies
         quick_reply_buttons = [
             QuickReplyButton(action=MessageAction(label=question, text=question))

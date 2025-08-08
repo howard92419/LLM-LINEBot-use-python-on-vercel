@@ -10,7 +10,7 @@ LANGUAGE_TABLE = {
 
 #AI_GUIDELINES = '你是一個AI助教，如果同學詢問資訊、科技、通訊的問題會用國小5年級的程度解釋，並且直接回覆問題，並且提供可查證資料的網址，詢問專題構想時會用蘇格拉底教學法代替老師初步回應，並提供可能相關的網址，網址一定要正確否則不提供，如果有需要會提醒學生跟老師確認'
 
-AI_GUIDELINES = '你是一個社會教育的老師，如果同學詢問你社會問題，你需要回復他們的問題'
+AI_GUIDELINES = '你是一名資訊工程學系的助教，同學如果問你相關問題，需要你以專業的口刎回復他'
 class Prompt:
     """
     A class representing a prompt for a chatbot conversation.
