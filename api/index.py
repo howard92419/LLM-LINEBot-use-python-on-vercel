@@ -91,35 +91,19 @@ def handle_message(event):
 
 @web_handler.add(MessageEvent, message=ImageMessage)
 def handle_image_message(event):
-    # 1) 向 LINE 取圖
-    resp = line_bot_api.get_message_content(event.message.id)  # requests.Response
-    img_bytes = b"".join(chunk for chunk in resp.iter_content())
+    # 處理圖片訊息
+    image_content = line_bot_api.get_message_content(event.message.id)
+    path = chatgpt.get_user_image(image_content)
+    link = chatgpt.upload_img_link(path)
 
-    # 2) 轉 base64 -> data URL（模型一定讀得到）
-    b64 = base64.b64encode(img_bytes).decode("utf-8")
-    data_url = f"data:image/jpeg;base64,{b64}"
-
-    # 3) 呼叫 OpenAI 的 chat.completions（多模態）
-    prompt = "請閱讀這張圖片的重點內容，條列出主要步驟/資訊。"
-    oai = client.chat.completions.create(
-        model=MODEL,
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": prompt},
-                    {"type": "image_url", "image_url": {"url": data_url}},
-                ],
-            }
-        ],
-    )
-
-    # 4) 正確取回傳內容
-    reply_msg = oai.choices[0].message.content
-
+    # 調用OpenAI API進行圖片處理
+    response = chatgpt.process_image_link(link)
+    
+    # 假設OpenAI回傳的結果包含在response['choices'][0]['text']
+    reply_msg = response['choices'][0]['text']
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=f"助教：{reply_msg}")
-    )
+        TextSendMessage(text=f"助教:{reply_msg}"))
+
 if __name__ == "__main__":
     app.run()

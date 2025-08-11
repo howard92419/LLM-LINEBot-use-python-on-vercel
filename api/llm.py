@@ -64,11 +64,12 @@ class ChatGPT:
         )
         return response
 
-    def get_user_image_base64(self, image_content):
-        img_bytes = b"".join(chunk for chunk in image_content.iter_content())
-        b64 = base64.b64encode(img_bytes).decode("utf-8")
-        return f"data:image/png;base64,{b64}"
-
+    def get_user_image(self, image_content):
+        path = './static/temp.png'
+        with open(path, 'wb') as fd:
+            for chunk in image_content.iter_content():
+                fd.write(chunk)
+        return path
 
     def upload_img_link(self, imgpath):
         IMGUR_CLIENT_ID = os.getenv("IMGUR_CLIENT_ID")
