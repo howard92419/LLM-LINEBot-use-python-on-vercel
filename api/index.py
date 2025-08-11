@@ -121,6 +121,5 @@ def handle_image_message(event):
         event.reply_token,
         TextSendMessage(text=f"助教：{reply_msg}")
     )
-
 if __name__ == "__main__":
     app.run()
