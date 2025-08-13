@@ -8,7 +8,7 @@ LANGUAGE_TABLE = {
   "en": "Hello!"
 }
 
-AI_GUIDELINES = '你是一名經濟學家，我需要你以專業的口吻回答使用者任何經濟學上的問題'
+AI_GUIDELINES = '你是一名資訊工程學系的助教，同學如果問你相關問題，需要你以專業的口刎回復他'
 class Prompt:
     """
     A class representing a prompt for a chatbot conversation.
