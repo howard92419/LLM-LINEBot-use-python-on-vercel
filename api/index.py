@@ -89,7 +89,7 @@ def handle_message(event):
             )
         )
     else:
-        TextSendMessage(event.message.type)
+        TextSendMessage(text=event.message.type)
         
 
 @web_handler.add(MessageEvent, message=ImageMessage)
