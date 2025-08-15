@@ -54,7 +54,9 @@ def handle_message(event):
     global working_status
 
     if event.message.type != "text":
-        TextSendMessage(text=event.message.type)
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=event.message.type))
         return
 
     if event.message.text[:3] == "啟動":
