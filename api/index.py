@@ -88,6 +88,9 @@ def handle_message(event):
                 quick_reply=QuickReply(items=quick_reply_buttons)
             )
         )
+    else:
+        TextSendMessage(event.message.type)
+        
 
 @web_handler.add(MessageEvent, message=ImageMessage)
 def handle_image_message(event):
