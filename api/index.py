@@ -54,6 +54,7 @@ def handle_message(event):
     global working_status
 
     if event.message.type != "text":
+        TextSendMessage(text=event.message.type)
         return
 
     if event.message.text[:3] == "啟動":
@@ -89,8 +90,6 @@ def handle_message(event):
                 quick_reply=QuickReply(items=quick_reply_buttons)
             )
         )
-    else:
-        TextSendMessage(text=event.message.type)
         
 
 @web_handler.add(MessageEvent, message=ImageMessage)
