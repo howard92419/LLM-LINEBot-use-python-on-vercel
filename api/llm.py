@@ -64,11 +64,16 @@ class ChatGPT:
         )
         return response
 
-    def get_user_image(self, image_content):
-        path = './static/temp.png'
-        with open(path, 'wb') as fd:
-            for chunk in image_content.iter_content():
-                fd.write(chunk)
+    def get_user_image(image_stream):
+        temp_dir = "/tmp"
+        os.makedirs(temp_dir, exist_ok=True)
+
+        image_id = str(uuid.uuid4())
+        path = os.path.join(temp_dir, f"{image_id}.png")
+
+        with open(path, 'wb') as f:
+            for chunk in image_stream.iter_content():
+                f.write(chunk)
         return path
 
     def upload_img_link(self, imgpath):
