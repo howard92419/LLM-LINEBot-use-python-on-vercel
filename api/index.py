@@ -58,10 +58,10 @@ def handle_message(event):
         logging.info(f"Received non-text message: {event.message.type}")
         
         if event.message.type == "image":
-            # 回覆收到圖片
+            message_id = event.message.id
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="我收到你傳來的圖片囉 📷！目前還沒辦法分析，但你可以打 '啟動' 讓我進入 AI 模式。")
+                TextSendMessage(text=f"我收到你的圖片囉！（ID: {message_id}）")
             )
         else:
             # 其他非文字訊息類型（video/audio/file 等）
