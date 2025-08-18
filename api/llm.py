@@ -65,13 +65,12 @@ class ChatGPT:
         return response
 
     def get_user_image(self, image_content):
-        if not os.path.exists("./static"):
-            os.makedirs("./static")
-        path = "./static/temp.png"
-        with open(path, "wb") as fd:
+        temp_path = "/tmp/temp.png"
+        with open(temp_path, 'wb') as f:
             for chunk in image_content.iter_content():
-                fd.write(chunk)
-        return path
+                f.write(chunk)
+        return temp_path
+
 
     def upload_img_link(self, imgpath):
         IMGUR_CLIENT_ID = os.getenv("IMGUR_CLIENT_ID")
