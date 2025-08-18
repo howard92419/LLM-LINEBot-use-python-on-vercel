@@ -145,29 +145,23 @@ def handle_image_message(event):
         path = chatgpt.get_user_image(image_content)
         print(f"[DEBUG] 圖片已儲存到：{path}")
 
-        # 3. 上傳圖檔，取得公開連結
-        link = chatgpt.upload_img_link(path)
-        print(f"[DEBUG] 圖片上傳完成，網址為：{link}")
+        # 3. 處理圖片並發送給 OpenAI 進行分析
+        reply_msg = chatgpt.process_image_file(path)
+        print(f"[DEBUG] OpenAI 回應：{reply_msg}")
 
-        # 4. 呼叫 OpenAI 分析圖片
-        response = chatgpt.process_image_link(link)
-        print(f"[DEBUG] OpenAI 分析完成：{response}")
-
-        # 5. 解析並回覆
-        reply_msg = response['choices'][0]['text']
+        # 4. 回覆用戶
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=f"助教：{reply_msg}")
         )
 
     except Exception as e:
-        import traceback
         print("[ERROR] 圖片處理錯誤：", e)
-        traceback.print_exc()  # ⬅️ 加上這行！
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text="❗ 圖片處理時發生錯誤，請稍後再試")
         )
+
 
 if __name__ == "__main__":
     app.run()

@@ -85,3 +85,22 @@ class ChatGPT:
         except Exception as e:
             print("[ERROR] Cloudinary upload failed:", e)
             return None
+        
+    def process_image_file(self, img_path):
+        with open(img_path, "rb") as image_file:
+            base64_image = base64.b64encode(image_file.read()).decode("utf-8")
+        base64_data_url = f"data:image/png;base64,{base64_image}"
+
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": "請幫我分析這張圖片"},
+                        {"type": "image_url", "image_url": {"url": base64_data_url}}
+                    ]
+                }
+            ]
+        )
+        return response.choices[0].message.content
