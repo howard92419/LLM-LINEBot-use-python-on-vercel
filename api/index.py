@@ -130,22 +130,41 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text="❗ 發生錯誤，請稍後再試一次")
         )
-        
+
 @web_handler.add(MessageEvent, message=ImageMessage)
 def handle_image_message(event):
-    # 處理圖片訊息
-    image_content = line_bot_api.get_message_content(event.message.id)
-    path = chatgpt.get_user_image(image_content)
-    link = chatgpt.upload_img_link(path)
+    try:
+        # 取得圖片內容
+        image_content = line_bot_api.get_message_content(event.message.id)
+        print("[DEBUG] 成功取得圖片內容")
 
-    # 調用OpenAI API進行圖片處理
-    response = chatgpt.process_image_link(link)
-    
-    # 假設OpenAI回傳的結果包含在response['choices'][0]['text']
-    reply_msg = response['choices'][0]['text']
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=f"助教:{reply_msg}"))
+        # 儲存圖片（假設回傳的是本地檔案路徑）
+        path = chatgpt.get_user_image(image_content)
+        print(f"[DEBUG] 圖片已儲存到路徑：{path}")
+
+        # 上傳圖片並取得公開連結
+        link = chatgpt.upload_img_link(path)
+        print(f"[DEBUG] 圖片上傳完成，連結為：{link}")
+
+        # 傳給 OpenAI Vision 做分析
+        response = chatgpt.process_image_link(link)
+        print(f"[DEBUG] OpenAI 回傳結果：{response}")
+
+        # 解析回應
+        reply_msg = response['choices'][0]['text'] if 'choices' in response else "⚠️ 回應格式異常，請稍後再試"
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=f"助教：{reply_msg}")
+        )
+
+    except Exception as e:
+        import traceback
+        print("[ERROR] 圖片處理發生錯誤：", e)
+        traceback.print_exc()
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="❗ 圖片處理時發生錯誤，請稍後再試")
+        )
 
 if __name__ == "__main__":
     app.run()
