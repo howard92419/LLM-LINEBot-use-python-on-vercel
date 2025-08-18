@@ -53,10 +53,22 @@ def handle_message(event):
     
     global working_status
 
+    # 非文字訊息處理
     if event.message.type != "text":
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=event.message.type))
+        logging.info(f"Received non-text message: {event.message.type}")
+        
+        if event.message.type == "image":
+            # 回覆收到圖片
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="我收到你傳來的圖片囉 📷！目前還沒辦法分析，但你可以打 '啟動' 讓我進入 AI 模式。")
+            )
+        else:
+            # 其他非文字訊息類型（video/audio/file 等）
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=f"我收到一個 {event.message.type} 類型的訊息，目前還沒支援這種內容哦！")
+            )
         return
 
     if event.message.text[:3] == "啟動":
