@@ -6,6 +6,7 @@ from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageMessage, ImageSendMessage, QuickReply, QuickReplyButton, MessageAction
+import logging
 
 line_bot_api = LineBotApi(os.getenv("LINE_CHANNEL_ACCESS_TOKEN"))
 web_handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET"))
@@ -56,7 +57,8 @@ def handle_message(event):
     # 非文字訊息處理
     if event.message.type != "text":
         logging.info(f"Received non-text message: {event.message.type}")
-        
+        print(f"[DEBUG] 收到非文字訊息：{event.message.type}")
+
         if event.message.type == "image":
             message_id = event.message.id
             line_bot_api.reply_message(
