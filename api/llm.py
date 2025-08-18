@@ -81,5 +81,9 @@ class ChatGPT:
 
 
     def upload_img_link(img_path):
-        upload_result = cloudinary.uploader.upload(img_path)
-        return upload_result['secure_url']
+        try:
+            result = cloudinary.uploader.upload(img_path)
+            return result['secure_url']
+        except Exception as e:
+            print("[ERROR] Cloudinary upload failed:", e)
+            return None
