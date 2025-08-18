@@ -56,21 +56,19 @@ class ChatGPT:
         self.prompt.add_msg(text)
 
     def process_image_link(self, image_url):
-        """
-        Processes an image using OpenAI's image recognition capabilities.
-
-        Parameters:
-        - image_url: the URL of the image to be processed.
-
-        Returns:
-        - A dictionary representing the result of the image processing.
-        """
-        response = client.Completion.create(
-            engine="davinci",
-            prompt=f"Analyze the text in this image: {image_url}",
-            max_tokens=100
+        response = client.chat.completions.create(
+            model="gpt-4",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": "請幫我分析這張圖片"},
+                        {"type": "image_url", "image_url": {"url": image_url}}
+                    ]
+                }
+            ]
         )
-        return response
+        return response.choices[0].message.content
 
     def get_user_image(self, image_content):
         temp_path = "/tmp/temp.png"
@@ -80,7 +78,7 @@ class ChatGPT:
         return temp_path
 
 
-    def upload_img_link(img_path):
+    def upload_img_link(self, img_path):
         try:
             result = cloudinary.uploader.upload(img_path)
             return result['secure_url']
