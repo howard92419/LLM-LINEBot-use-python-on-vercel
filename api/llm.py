@@ -3,6 +3,14 @@ import os
 from openai import OpenAI
 import pyimgur
 import base64
+import cloudinary
+import cloudinary.uploader
+
+cloudinary.config( 
+  cloud_name = "dignwsyyd", 
+  api_key = "947292761547843", 
+  api_secret = "pORjKjloUwbcIw5lKu1Lvzge_bc"
+)
 
 client = OpenAI()
 
@@ -72,8 +80,6 @@ class ChatGPT:
         return temp_path
 
 
-    def upload_img_link(self, imgpath):
-        IMGUR_CLIENT_ID = os.getenv("IMGUR_CLIENT_ID")
-        im = pyimgur.Imgur(IMGUR_CLIENT_ID)
-        uploaded_image = im.upload_image(imgpath, title="Uploaded with PyImgur")
-        return uploaded_image.link
+    def upload_img_link(img_path):
+        upload_result = cloudinary.uploader.upload(img_path)
+        return upload_result['secure_url']
