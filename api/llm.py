@@ -3,14 +3,6 @@ import os
 from openai import OpenAI
 import pyimgur
 import base64
-import cloudinary
-import cloudinary.uploader
-
-cloudinary.config( 
-  cloud_name = "dignwsyyd", 
-  api_key = "947292761547843", 
-  api_secret = "pORjKjloUwbcIw5lKu1Lvzge_bc"
-)
 
 client = OpenAI()
 
@@ -55,37 +47,16 @@ class ChatGPT:
         """
         self.prompt.add_msg(text)
 
-    def process_image_link(self, image_url):
-        response = client.chat.completions.create(
-            model="gpt-4",
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": "請幫我分析這張圖片"},
-                        {"type": "image_url", "image_url": {"url": image_url}}
-                    ]
-                }
-            ]
-        )
-        return response.choices[0].message.content
-
     def get_user_image(self, image_content):
         temp_path = "/tmp/temp.png"
         with open(temp_path, 'wb') as f:
             for chunk in image_content.iter_content():
                 f.write(chunk)
-        return temp_path
-
-
-    def upload_img_link(self, img_path):
-        try:
-            result = cloudinary.uploader.upload(img_path)
-            return result['secure_url']
-        except Exception as e:
-            print("[ERROR] Cloudinary upload failed:", e)
-            return None
+        return temp_path 
         
+    '''GPT支援URL，但有限制條件，例如...必須是http  or 可直接載入的圖片，不然就是要把圖片使用base 64 encode
+    此process_image_file() function作用為將圖片轉換為base 64 編碼'''
+
     def process_image_file(self, img_path):
         with open(img_path, "rb") as image_file:
             base64_image = base64.b64encode(image_file.read()).decode("utf-8")

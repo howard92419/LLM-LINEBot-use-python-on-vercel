@@ -49,13 +49,14 @@ def start_loading_animation(chat_id, loading_seconds):
 @web_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     try:
+        #除錯用，收到image type的reply
         if event.message.type == "image":
             message_id = event.message.id
 
             # 回應文字確認收到圖片
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text=f"📷 我收到你的圖片囉！（ID: {message_id}）")
+                TextSendMessage(text=f"我收到你的圖片囉！（ID: {message_id}）")
             )
             return
 
@@ -72,7 +73,7 @@ def handle_message(event):
             working_status = True
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="✅ AI 已啟動！")
+                TextSendMessage(text="AI 已啟動！")
             )
             return
 
@@ -80,7 +81,7 @@ def handle_message(event):
             working_status = False
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="🛑 AI 已關閉，輸入「啟動」可重新開始")
+                TextSendMessage(text="AI 已關閉，輸入「啟動」可重新開始")
             )
             return
 
@@ -92,7 +93,7 @@ def handle_message(event):
             if not response:
                 line_bot_api.reply_message(
                     event.reply_token,
-                    TextSendMessage(text="⚠️ 抱歉，我沒收到有效的回應，請再試一次")
+                    TextSendMessage(text="抱歉，我沒收到有效的回應，請再試一次")
                 )
                 return
 
@@ -117,30 +118,30 @@ def handle_message(event):
         # 如果 AI 沒啟動，就告訴使用者
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="💤 AI 尚未啟動，請輸入「啟動」來開始使用。")
+            TextSendMessage(text="AI 尚未啟動，請輸入「啟動」來開始使用。")
         )
 
     except Exception as e:
         import logging
-        logging.exception("⚠️ webhook 處理錯誤：")
+        logging.exception("webhook 處理錯誤：")
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="❗ 發生錯誤，請稍後再試一次")
+            TextSendMessage(text="發生錯誤，請稍後再試一次")
         )
 
 @web_handler.add(MessageEvent, message=ImageMessage)
 def handle_image_message(event):
     try:
-        # 1. 下載圖片
+        #下載圖片
         image_content = line_bot_api.get_message_content(event.message.id)
 
-        # 2. 儲存圖片
+        #儲存圖片
         path = chatgpt.get_user_image(image_content)
 
-        # 3. 處理圖片並發送給 OpenAI 進行分析
+        #處理圖片並發送給 OpenAI 進行分析
         reply_msg = chatgpt.process_image_file(path)
 
-        # 4. 回覆用戶
+        #回覆用戶
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=f"助教：{reply_msg}")
@@ -150,7 +151,7 @@ def handle_image_message(event):
         print("[ERROR] 圖片處理錯誤：", e)
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="❗ 圖片處理時發生錯誤，請稍後再試")
+            TextSendMessage(text="圖片處理時發生錯誤，請稍後再試")
         )
 
 
