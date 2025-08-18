@@ -48,66 +48,89 @@ def start_loading_animation(chat_id, loading_seconds):
 
 @web_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    """LINE MessageAPI message processing"""
-    if event.source.user_id == 'Udeadbeefdeadbeefdeadbeefdeadbeef':
-        return 'OK'
-    
-    global working_status
-
-    # 非文字訊息處理
-    if event.message.type != "text":
-        logging.info(f"Received non-text message: {event.message.type}")
-        print(f"[DEBUG] 收到非文字訊息：{event.message.type}")
+    try:
+        print(f"[DEBUG] 收到訊息類型：{event.message.type}")
 
         if event.message.type == "image":
             message_id = event.message.id
+            print(f"[DEBUG] 收到圖片 ID：{message_id}")
+
+            # 回應文字確認收到圖片
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text=f"我收到你的圖片囉！（ID: {message_id}）")
+                TextSendMessage(text=f"📷 我收到你的圖片囉！（ID: {message_id}）")
             )
-        else:
-            # 其他非文字訊息類型（video/audio/file 等）
+            return
+
+        if event.message.type != "text":
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text=f"我收到一個 {event.message.type} 類型的訊息，目前還沒支援這種內容哦！")
+                TextSendMessage(text=f"我目前只懂文字訊息，你傳的是 {event.message.type}。")
             )
-        return
+            return
 
-    if event.message.text[:3] == "啟動":
-        working_status = True
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="啟動AI"))
-        return
-
-    if event.message.text[:5] == "關閉AI":
-        working_status = False
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text='AI下班去，喚醒請輸入"啟動"'))
-        return
-
-    if working_status:
-        start_loading_animation(event.source.user_id, 5)
-        chatgpt.add_msg(f"HUMAN:{event.message.text}?\n")
-        reply_msg = chatgpt.get_response().replace("AI:", "", 1)
-        chatgpt.add_msg(f"AI:{reply_msg}\n")
-        
-        questions = ["了解更多", "出2個練習題","相關文獻", "相關觀念"]
-        # 將追問問題設為 Quick Replies
-        quick_reply_buttons = [
-            QuickReplyButton(action=MessageAction(label=question, text=question))
-            for question in questions
-        ]
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(
-                text=reply_msg, 
-                quick_reply=QuickReply(items=quick_reply_buttons)
+        # 以下處理純文字訊息
+        if event.message.text[:3] == "啟動":
+            global working_status
+            working_status = True
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="✅ AI 已啟動！")
             )
+            return
+
+        if event.message.text[:5] == "關閉AI":
+            working_status = False
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="🛑 AI 已關閉，輸入「啟動」可重新開始")
+            )
+            return
+
+        if working_status:
+            question = event.message.text
+            chatgpt.add_msg(f"HUMAN:{question}?\n")
+            response = chatgpt.get_response()
+
+            if not response:
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text="⚠️ 抱歉，我沒收到有效的回應，請再試一次")
+                )
+                return
+
+            reply_msg = response.replace("AI:", "", 1)
+            chatgpt.add_msg(f"AI:{reply_msg}\n")
+
+            questions = ["了解更多", "出2個練習題", "相關文獻", "相關觀念"]
+            quick_reply_buttons = [
+                QuickReplyButton(action=MessageAction(label=q, text=q))
+                for q in questions
+            ]
+
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(
+                    text=reply_msg,
+                    quick_reply=QuickReply(items=quick_reply_buttons)
+                )
+            )
+            return
+
+        # 如果 AI 沒啟動，就告訴使用者
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="💤 AI 尚未啟動，請輸入「啟動」來開始使用。")
+        )
+
+    except Exception as e:
+        import logging
+        logging.exception("⚠️ webhook 處理錯誤：")
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="❗ 發生錯誤，請稍後再試一次")
         )
         
-
 @web_handler.add(MessageEvent, message=ImageMessage)
 def handle_image_message(event):
     # 處理圖片訊息
