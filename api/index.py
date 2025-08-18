@@ -49,8 +49,8 @@ def start_loading_animation(chat_id, loading_seconds):
 @web_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     try:
-        #除錯用，收到image type的reply
         if event.message.type == "image":
+            #在這支code裡，message_id也就代表image的id
             message_id = event.message.id
 
             # 回應文字確認收到圖片
@@ -129,24 +129,21 @@ def handle_message(event):
             TextSendMessage(text="發生錯誤，請稍後再試一次")
         )
 
+#這個裝飾器中，我處理的是圖片訊息，當user發送圖片時，handle_image_message這個函數會被呼叫
 @web_handler.add(MessageEvent, message=ImageMessage)
 def handle_image_message(event):
     try:
         #下載圖片
         image_content = line_bot_api.get_message_content(event.message.id)
-
         #儲存圖片
         path = chatgpt.get_user_image(image_content)
-
         #處理圖片並發送給 OpenAI 進行分析
         reply_msg = chatgpt.process_image_file(path)
-
         #回覆用戶
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=f"助教：{reply_msg}")
+            TextSendMessage(text=f"{reply_msg}")
         )
-
     except Exception as e:
         print("[ERROR] 圖片處理錯誤：", e)
         line_bot_api.reply_message(

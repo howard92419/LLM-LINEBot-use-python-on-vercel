@@ -48,8 +48,13 @@ class ChatGPT:
         self.prompt.add_msg(text)
 
     def get_user_image(self, image_content):
+        #/tmp/是大部分雲端平台和伺服器允許寫入的唯一目錄，是臨時儲存空間，在這邊我用來暫存等等要處理的圖片
         temp_path = "/tmp/temp.png"
+
+
         with open(temp_path, 'wb') as f:
+            #將image切成很多chunk存入temp_path，因為如果圖片檔很大一次存入可overflow
+            #image_content 是來自 LINE 的圖片資料
             for chunk in image_content.iter_content():
                 f.write(chunk)
         return temp_path 
@@ -57,7 +62,7 @@ class ChatGPT:
     '''GPT支援URL，但有限制條件，例如...必須是http  or 可直接載入的圖片，不然就是要把圖片使用base 64 encode
     此process_image_file() function作用為將圖片轉換為base 64 編碼'''
 
-    def process_image_file(self, img_path):
+    def process_image_file(self, img_path):#轉成base 64的function
         with open(img_path, "rb") as image_file:
             base64_image = base64.b64encode(image_file.read()).decode("utf-8")
         base64_data_url = f"data:image/png;base64,{base64_image}"
