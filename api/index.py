@@ -26,7 +26,6 @@ def home():
 def callback():
     signature = request.headers['X-Line-Signature']
     body = request.get_data(as_text=True)
-    print(body)
     app.logger.info("Request body: " + body)
     try:
         web_handler.handle(body, signature)
@@ -50,11 +49,8 @@ def start_loading_animation(chat_id, loading_seconds):
 @web_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     try:
-        print(f"[DEBUG] 收到訊息類型：{event.message.type}")
-
         if event.message.type == "image":
             message_id = event.message.id
-            print(f"[DEBUG] 收到圖片 ID：{message_id}")
 
             # 回應文字確認收到圖片
             line_bot_api.reply_message(
@@ -135,19 +131,14 @@ def handle_message(event):
 @web_handler.add(MessageEvent, message=ImageMessage)
 def handle_image_message(event):
     try:
-        print("[DEBUG] 收到圖片訊息")
-
         # 1. 下載圖片
         image_content = line_bot_api.get_message_content(event.message.id)
-        print("[DEBUG] 圖片內容已下載")
 
         # 2. 儲存圖片
         path = chatgpt.get_user_image(image_content)
-        print(f"[DEBUG] 圖片已儲存到：{path}")
 
         # 3. 處理圖片並發送給 OpenAI 進行分析
         reply_msg = chatgpt.process_image_file(path)
-        print(f"[DEBUG] OpenAI 回應：{reply_msg}")
 
         # 4. 回覆用戶
         line_bot_api.reply_message(
