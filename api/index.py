@@ -146,7 +146,7 @@ def handle_image_message(event):
             TextSendMessage(text=f"{reply_msg}")
         )
 
-        chatgpt.add_msg(f"AI:{reply_msg}")
+        chatgpt.add_msg(f"AI:{reply_msg}\n")
     except Exception as e:
         print("[ERROR] 圖片處理錯誤：", e)
         line_bot_api.reply_message(
