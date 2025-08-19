@@ -65,7 +65,10 @@ class ChatGPT:
     def process_image_file(self, img_path):#轉成base 64的function
         with open(img_path, "rb") as image_file:
             base64_image = base64.b64encode(image_file.read()).decode("utf-8")
+        
         base64_data_url = f"data:image/png;base64,{base64_image}"
+        self.add_msg(f"HUMAN:{base64_image}")
+        
 
         response = client.chat.completions.create(
             model="gpt-4o",

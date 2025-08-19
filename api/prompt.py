@@ -1,4 +1,7 @@
 import os
+from linebot import LineBotApi, WebhookHandler
+from linebot.exceptions import InvalidSignatureError
+from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageMessage, ImageSendMessage, QuickReply, QuickReplyButton, MessageAction
 
 chat_language = os.getenv("INIT_LANGUAGE", default = "zh-TW")
 
@@ -7,6 +10,8 @@ LANGUAGE_TABLE = {
   "zh-TW": "哈囉！",
   "en": "Hello!"
 }
+
+
 
 AI_GUIDELINES = '你是一名資訊工程學系的助教，同學如果問你相關問題，需要你以專業的口刎回復他'
 class Prompt:

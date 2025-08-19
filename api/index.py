@@ -96,7 +96,8 @@ def handle_message(event):
                     TextSendMessage(text="抱歉，我沒收到有效的回應，請再試一次")
                 )
                 return
-
+            
+            #將對話加入GPT的聊天紀錄，GPT就可以知道聊天的前後文
             reply_msg = response.replace("AI:", "", 1)
             chatgpt.add_msg(f"AI:{reply_msg}\n")
 
@@ -144,13 +145,14 @@ def handle_image_message(event):
             event.reply_token,
             TextSendMessage(text=f"{reply_msg}")
         )
+
+        chatgpt.add_msg(f"AI:{reply_msg}")
     except Exception as e:
         print("[ERROR] 圖片處理錯誤：", e)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text="圖片處理時發生錯誤，請稍後再試")
         )
-
 
 if __name__ == "__main__":
     app.run()
