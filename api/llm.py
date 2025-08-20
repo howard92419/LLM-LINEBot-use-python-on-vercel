@@ -32,10 +32,13 @@ class ChatGPT:
         Returns:
         - A string representing the generated response.
         """
+
         response = client.chat.completions.create(
             model=self.model,
+            #generate_prompt會強迫GPT去看之前7則的對話內容
             messages=self.prompt.generate_prompt(),
         )
+        #choices是GPT的回應內容，choices是一個list，通常GPT會有好幾種不同的回應，我們只選取第一種回應
         return response.choices[0].message.content
 
     def add_msg(self, text):

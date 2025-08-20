@@ -5,6 +5,7 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageMess
 
 chat_language = os.getenv("INIT_LANGUAGE", default = "zh-TW")
 
+#如果環境變數裡面有設定SG_LIST_LIMIT的值就直接用，沒設定的話就用default的(7句話)
 MSG_LIST_LIMIT = int(os.getenv("MSG_LIST_LIMIT", default = 7))
 LANGUAGE_TABLE = {
   "zh-TW": "哈囉！",
@@ -27,7 +28,7 @@ class Prompt:
         self.msg_list.append(
             {
                 "role": "system", 
-                "content": f"{LANGUAGE_TABLE[chat_language]}, {AI_GUIDELINES})"
+                "content": f"{LANGUAGE_TABLE[chat_language]}, {AI_GUIDELINES}"
              })    
     def add_msg(self, new_msg):
         """
@@ -36,6 +37,7 @@ class Prompt:
         Args:
         - new_msg (str): the new message to be added
         """
+        #如果大於7句話，就pop掉之前的對話
         if len(self.msg_list) >= MSG_LIST_LIMIT:
             self.msg_list.pop(0)
         self.msg_list.append({"role": "user", "content": new_msg})
