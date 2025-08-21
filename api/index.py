@@ -91,6 +91,7 @@ def handle_message(event):
             question = event.message.text
             chatgpt.add_msg(f"HUMAN:{question}?\n")
             response = chatgpt.get_response()
+            print(prompt.msg_list)
 
             if not response:
                 line_bot_api.reply_message(
@@ -155,8 +156,6 @@ def handle_image_message(event):
             event.reply_token,
             TextSendMessage(text = "你需要我對圖片進行什麼操作")
         )
-
-        print(prompt.msg_list)
         
         
     except Exception as e:
