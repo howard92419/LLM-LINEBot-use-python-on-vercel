@@ -134,10 +134,8 @@ def handle_message(event):
 @web_handler.add(MessageEvent, message=ImageMessage)
 def handle_image_message(event):
     try:
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="請問你需要我幫你做什麼")
-        )
+        '''因為傳完圖片GPT不能知道我傳圖片要幹什麼，
+        這邊採用主動問答的方式，讓GPT知道我要他做啥'''
         #下載圖片
         image_content = line_bot_api.get_message_content(event.message.id)
         #儲存圖片
