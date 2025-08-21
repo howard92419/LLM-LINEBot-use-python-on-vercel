@@ -70,7 +70,7 @@ class ChatGPT:
             base64_image = base64.b64encode(image_file.read()).decode("utf-8")
         
         base64_data_url = f"data:image/png;base64,{base64_image}"
-        self.add_msg(f"HUMAN:已將圖片轉換為 Base64 格式。\n")
+        self.add_msg(f"HUMAN: 圖片\n")
 
 
         response = client.chat.completions.create(
@@ -79,7 +79,8 @@ class ChatGPT:
                 {
                     "role": "user",
                     "content": [
-                        {"type": "text", "text": "請幫我分析這張圖片，並且把這張圖片的所有細節及內容，我需要越精確越好"},
+                        {"type": "text", "text": "請幫我分析這張圖片，並且把這張圖片的所有細節及內容，我需要越精確越好\
+                         也需要你幫我分析圖片裡面的故事內容"},
                         {"type": "image_url", "image_url": {"url": base64_data_url}}
                     ]
                 }
