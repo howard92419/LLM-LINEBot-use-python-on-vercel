@@ -86,3 +86,23 @@ class ChatGPT:
             ]
         )
         return response.choices[0].message.content
+    
+    def process_history_image(self, img_path, prompt):
+        with open(img_path, "rb") as image_file:
+            base64_image = base64.b64encode(image_file.read()).decode("utf-8")
+        
+        base64_data_url = f"data:image/png;base64,{base64_image}"
+
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": "這是我剛剛傳的圖片內容，" + prompt},
+                        {"type": "image_url", "image_url": {"url": base64_data_url}}
+                    ]
+                }
+            ]
+        )
+        return response.choices[0].message.content

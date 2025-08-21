@@ -98,6 +98,18 @@ def handle_message(event):
                 )
                 return
             
+            if "圖片" in question:
+                #下載圖片
+                image_content = line_bot_api.get_message_content(event.message.id)
+                #儲存圖片
+                path = chatgpt.get_user_image(image_content)
+                reply_msg = chatgpt.process_history_image(path, question)
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=f"{reply_msg}")
+                )
+                chatgpt.add_msg(f"AI:{reply_msg}\n")
+            
             #將對話加入GPT的聊天紀錄，GPT就可以知道聊天的前後文
             reply_msg = response.replace("AI:", "", 1)
             chatgpt.add_msg(f"AI:{reply_msg}\n")
