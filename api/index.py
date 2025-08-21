@@ -136,6 +136,11 @@ def handle_image_message(event):
     try:
         '''因為傳完圖片GPT不能知道我傳圖片要幹什麼，
         這邊採用主動問答的方式，讓GPT知道我要他做啥'''
+
+        line_bot_api,reply_message(
+            event,reply_token,
+            TextSendMessage(text = "你需要我對圖片進行什麼操作")
+        )
         #下載圖片
         image_content = line_bot_api.get_message_content(event.message.id)
         #儲存圖片
@@ -143,11 +148,10 @@ def handle_image_message(event):
         #處理圖片並發送給 OpenAI 進行分析
         reply_msg = chatgpt.process_image_file(path)
         #回覆用戶
-        line_bot_api.reply_message(
+        '''line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=f"{reply_msg}")
-        )
-
+        )'''
         chatgpt.add_msg(f"AI:{reply_msg}\n")
     except Exception as e:
         print("[ERROR] 圖片處理錯誤：", e)
