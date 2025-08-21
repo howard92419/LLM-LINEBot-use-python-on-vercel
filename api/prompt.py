@@ -30,7 +30,6 @@ class Prompt:
                 "role": "system", 
                 "content": f"{LANGUAGE_TABLE[chat_language]}, {AI_GUIDELINES}"
              })
-        self.msg_list.append("這是對話紀錄")
         
     def add_msg(self, new_msg):
         """
