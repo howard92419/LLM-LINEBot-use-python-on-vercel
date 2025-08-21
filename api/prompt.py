@@ -30,6 +30,7 @@ class Prompt:
                 "role": "system", 
                 "content": f"{LANGUAGE_TABLE[chat_language]}, {AI_GUIDELINES}"
              })    
+        
     def add_msg(self, new_msg):
         """
         Adds a new message to the prompt.
