@@ -156,10 +156,7 @@ def handle_image_message(event):
             TextSendMessage(text = "你需要我對圖片進行什麼操作")
         )
 
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text = prompt.msg_list)
-        )
+        print(prompt.msg_list)
         
         
     except Exception as e:
