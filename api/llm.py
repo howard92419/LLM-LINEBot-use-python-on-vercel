@@ -70,7 +70,7 @@ class ChatGPT:
             base64_image = base64.b64encode(image_file.read()).decode("utf-8")
         
         base64_data_url = f"data:image/png;base64,{base64_image}"
-        self.add_msg(f"HUMAN: 圖片\n")
+        self.add_msg(f"HUMAN: 我剛剛傳了一張圖片\n")
 
 
         response = client.chat.completions.create(
