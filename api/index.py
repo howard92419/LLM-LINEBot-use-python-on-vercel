@@ -151,10 +151,10 @@ def handle_image_message(event):
         )'''
         chatgpt.add_msg(f"AI:{reply_msg}\n")
 
-        line_bot_api.reply_message(
+        '''line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text = "你需要我對圖片進行什麼操作")
-        )
+        )'''
 
         line_bot_api.reply_message(
             event.reply_token,
