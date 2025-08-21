@@ -8,6 +8,7 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageMessage, ImageSendMessage, QuickReply, QuickReplyButton, MessageAction
 import logging
 import uuid
+from api.prompt import Prompt
 
 line_bot_api = LineBotApi(os.getenv("LINE_CHANNEL_ACCESS_TOKEN"))
 web_handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET"))
@@ -15,6 +16,7 @@ working_status = os.getenv("DEFALUT_TALKING", default="true").lower() == "true"
 
 app = Flask(__name__)
 chatgpt = ChatGPT()
+prompt = Prompt()
 
 # domain root
 @app.route('/')
@@ -154,7 +156,10 @@ def handle_image_message(event):
             TextSendMessage(text = "你需要我對圖片進行什麼操作")
         )
 
-        
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text = prompt.msg_list)
+        )
         
         
     except Exception as e:
