@@ -6,7 +6,7 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageMess
 chat_language = os.getenv("INIT_LANGUAGE", default = "zh-TW")
 
 #如果環境變數裡面有設定SG_LIST_LIMIT的值就直接用，沒設定的話就用default的(7句話)
-MSG_LIST_LIMIT = int(os.getenv("MSG_LIST_LIMIT", default = 7))
+MSG_LIST_LIMIT = int(os.getenv("MSG_LIST_LIMIT", default = 10))
 LANGUAGE_TABLE = {
   "zh-TW": "哈囉！",
   "en": "Hello!"
@@ -14,8 +14,7 @@ LANGUAGE_TABLE = {
 
 
 
-AI_GUIDELINES = '你是一名資訊工程學系的助教，同學如果問你相關問題，需要你以專業的口吻回復他'
-Image_Prompt = '如果使用者問說有關於圖片的事情，請你去對話紀錄裡面找尋，並回復他對話紀錄裡面提到的圖片相關細節'
+AI_GUIDELINES = '你是一名資訊工程學系的助教，同學如果問你相關問題，需要你以專業的口吻回復他。圖片相關的問題請回顧對話內容中的圖片描述。'
 
 class Prompt:
     """
@@ -30,7 +29,7 @@ class Prompt:
         self.msg_list.append(
             {
                 "role": "system", 
-                "content": f"{LANGUAGE_TABLE[chat_language]}, {AI_GUIDELINES}, {Image_Prompt}"
+                "content": f"{LANGUAGE_TABLE[chat_language]}, {AI_GUIDELINES}"
              })
         
     def add_msg(self, new_msg):

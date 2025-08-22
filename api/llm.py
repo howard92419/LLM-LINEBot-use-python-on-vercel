@@ -24,6 +24,7 @@ class ChatGPT:
         self.model = os.getenv("OPENAI_MODEL", default="gpt-4o-mini")
         self.temperature = float(os.getenv("OPENAI_TEMPERATURE", default=0))
         self.max_tokens = int(os.getenv("OPENAI_MAX_TOKENS", default=600))
+        self.image_memory = []
 
     def get_response(self):
         """
@@ -70,7 +71,7 @@ class ChatGPT:
             base64_image = base64.b64encode(image_file.read()).decode("utf-8")
         
         base64_data_url = f"data:image/png;base64,{base64_image}"
-        self.add_msg(f"HUMAN: 我剛剛傳了一張圖片\n")
+        self.add_msg("HUMAN: 我剛剛上傳了一張圖片，可以記住嗎？")
 
 
         response = client.chat.completions.create(
@@ -79,10 +80,17 @@ class ChatGPT:
                 {
                     "role": "user",
                     "content": [
-                        {"type": "text", "text": "請幫我分析這張圖片，並且把這張圖片的所有細節及內容，我需要越精確越好，也需要你幫我分析圖片裡面的故事內容，如果之後有人詢問你圖片的相關內容，請你用你對話紀錄的圖片相關訊息做回覆"},
+                        {"type": "text", "text": "請幫我分析這張圖片，並記住它的內容，如果之後有人問圖片的事請根據這張圖片回應"},
                         {"type": "image_url", "image_url": {"url": base64_data_url}}
                     ]
                 }
             ]
         )
-        return response.choices[0].message.content
+        reply_text = response.choices[0].message.content
+        self.add_msg(f"AI: {reply_text}")
+
+        self.image_memory.append({
+            "path": img_path,
+            "description": reply_text
+        })
+        return reply_text

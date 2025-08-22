@@ -148,14 +148,8 @@ def handle_image_message(event):
             event.reply_token,
             TextSendMessage(text=f"{reply_msg}")
         )
-        chatgpt.add_msg(f"AI:{reply_msg}\n")
+        chatgpt.add_msg("AI:我已經分析完圖片囉，你可以問我任何與這張圖片有關的問題")
 
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text = "你需要我對圖片進行什麼操作")
-        )
-        
-        
     except Exception as e:
         print("[ERROR] 圖片處理錯誤：", e)
         line_bot_api.reply_message(
