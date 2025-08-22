@@ -15,6 +15,8 @@ LANGUAGE_TABLE = {
 
 
 AI_GUIDELINES = '你是一名資訊工程學系的助教，同學如果問你相關問題，需要你以專業的口吻回復他'
+Image_Prompt = '如果使用者問說有關於圖片的事情，請你去對話紀錄裡面找尋，並回復他對話紀錄裡面提到的圖片相關細節'
+
 class Prompt:
     """
     A class representing a prompt for a chatbot conversation.
@@ -28,7 +30,7 @@ class Prompt:
         self.msg_list.append(
             {
                 "role": "system", 
-                "content": f"{LANGUAGE_TABLE[chat_language]}, {AI_GUIDELINES}"
+                "content": f"{LANGUAGE_TABLE[chat_language]}, {AI_GUIDELINES}, {Image_Prompt}"
              })
         
     def add_msg(self, new_msg):

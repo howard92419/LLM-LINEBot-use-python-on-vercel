@@ -159,7 +159,7 @@ def handle_image_message(event):
     except Exception as e:
         print("[ERROR] 圖片處理錯誤：", e)
         line_bot_api.reply_message(
-            event.reply_token,
+            event.reply_token,  
             TextSendMessage(text="圖片處理時發生錯誤，請稍後再試")
         )
 
