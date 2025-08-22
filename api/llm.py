@@ -8,6 +8,8 @@ client = OpenAI()
 
 client.api_key = os.getenv("OPENAI_API_KEY")
 
+base64_data_url = ""
+
 class ChatGPT:
     """
     A class for generating responses using OpenAI's GPT model.
@@ -87,11 +89,7 @@ class ChatGPT:
         )
         return response.choices[0].message.content
     
-    def process_history_image(self, img_path, prompt):
-        with open(img_path, "rb") as image_file:
-            base64_image = base64.b64encode(image_file.read()).decode("utf-8")
-        
-        base64_data_url = f"data:image/png;base64,{base64_image}"
+    def process_history_image(self, prompt):
 
         response = client.chat.completions.create(
             model="gpt-4o",

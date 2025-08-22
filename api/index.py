@@ -99,11 +99,7 @@ def handle_message(event):
                 return
             
             if "圖片" in question:
-                #下載圖片
-                image_content = line_bot_api.get_message_content(event.message.id)
-                #儲存圖片
-                path = chatgpt.get_user_image(image_content)
-                reply_msg = chatgpt.process_history_image(path, question)
+                reply_msg = chatgpt.process_history_image(question)
                 line_bot_api.reply_message(
                     event.reply_token,
                     TextSendMessage(text=f"{reply_msg}")
