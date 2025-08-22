@@ -80,7 +80,7 @@ class ChatGPT:
                 {
                     "role": "user",
                     "content": [
-                        {"type": "text", "text": "請幫我分析這張圖片，並記住它的所有細節內容，如果之後有人問圖片的事請根據這張圖片回應"},
+                        {"type": "text", "text": "請幫我仔細分析這張圖片的所有細節，並記住它的所有細節內容，如果之後有人問圖片的事請根據這張圖片回應"},
                         {"type": "image_url", "image_url": {"url": base64_data_url}}
                     ]
                 }
