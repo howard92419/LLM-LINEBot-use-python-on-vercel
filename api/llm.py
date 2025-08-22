@@ -8,8 +8,6 @@ client = OpenAI()
 
 client.api_key = os.getenv("OPENAI_API_KEY")
 
-base64_data_url = ""
-
 class ChatGPT:
     """
     A class for generating responses using OpenAI's GPT model.
@@ -82,22 +80,6 @@ class ChatGPT:
                     "role": "user",
                     "content": [
                         {"type": "text", "text": "請幫我分析這張圖片，並且把這張圖片的所有細節及內容，我需要越精確越好，也需要你幫我分析圖片裡面的故事內容，如果之後有人詢問你圖片的相關內容，請你用你對話紀錄的圖片相關訊息做回覆"},
-                        {"type": "image_url", "image_url": {"url": base64_data_url}}
-                    ]
-                }
-            ]
-        )
-        return response.choices[0].message.content
-    
-    def process_history_image(self, prompt):
-
-        response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": "這是我剛剛傳的圖片內容，" + prompt},
                         {"type": "image_url", "image_url": {"url": base64_data_url}}
                     ]
                 }
