@@ -39,7 +39,7 @@ class Prompt:
         Args:
         - new_msg (str): the new message to be added
         """
-        #如果大於7句話，就pop掉之前的對話
+        #如果大於10句話，就pop掉之前的對話
         if len(self.msg_list) >= MSG_LIST_LIMIT:
             self.msg_list.pop(0)
         self.msg_list.append({"role": "user", "content": new_msg})
