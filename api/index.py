@@ -84,7 +84,7 @@ def handle_message(event):
                 TextSendMessage(text="AI 已關閉，輸入「啟動」可重新開始")
             )
             return
-        if event.message.text[::] == "關電燈:":
+        if event.message.text[::] == "關電燈":
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text="老師您好，已經開電燈了")
