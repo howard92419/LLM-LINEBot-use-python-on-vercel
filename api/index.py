@@ -141,12 +141,12 @@ def handle_image_message(event):
         #處理圖片並發送給 OpenAI 進行分析
         reply_msg = chatgpt.process_image_file(path)
         #回覆用戶
-        '''
+        
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=f"{reply_msg}")
         )
-        '''
+        
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text="請問你需要我幫你做什麼")
