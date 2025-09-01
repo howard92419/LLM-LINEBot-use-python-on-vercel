@@ -21,7 +21,7 @@ class ChatGPT:
 
     def __init__(self):
         self.prompt = Prompt()
-        self.model = os.getenv("OPENAI_MODEL", default="gpt-4.1-mini")
+        self.model = os.getenv("OPENAI_MODEL", default="gpt-4.1")
         self.temperature = float(os.getenv("OPENAI_TEMPERATURE", default=0))
         self.max_tokens = int(os.getenv("OPENAI_MAX_TOKENS", default=600))
         self.image_memory = []
@@ -74,7 +74,7 @@ class ChatGPT:
         self.add_msg("HUMAN: 我剛剛上傳了一張圖片，可以記住嗎？")
 
         response = client.chat.completions.create(
-            model="gpt-4.1-mini",
+            model="gpt-4.1",
             messages = [
                 {
                     "role": "user",
