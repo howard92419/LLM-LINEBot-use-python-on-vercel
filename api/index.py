@@ -2,6 +2,7 @@ import os
 import io
 import requests
 import PyPDF2
+import pdfplumber
 from api.llm import ChatGPT
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
@@ -202,12 +203,15 @@ def handle_pdf_file(event):
 
 # 解析 PDF 文件
 def extract_text_from_pdf(pdf_path):
-    with open(pdf_path, "rb") as file:
-        pdf_reader = PyPDF2.PdfReader(file)
-        text = ""
-        for page in pdf_reader.pages:
-            text += page.extract_text()
-    return text
+    try:
+        with pdfplumber.open(pdf_path) as pdf:
+            text = ""
+            for page in pdf.pages:
+                text += page.extract_text() or ""
+        return text
+    except Exception as e:
+        print(f"PDF 解析錯誤: {e}")
+        return None
 
 if __name__ == "__main__":
     app.run()

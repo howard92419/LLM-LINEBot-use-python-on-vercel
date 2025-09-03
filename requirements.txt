@@ -6,3 +6,4 @@ requests
 pyimgur
 cloudinary
 PyPDF2
+pdfplumber
