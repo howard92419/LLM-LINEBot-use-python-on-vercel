@@ -61,7 +61,16 @@ class ChatGPT:
             #image_content 是來自 LINE 的圖片資料
             for chunk in image_content.iter_content():
                 f.write(chunk)
-        return temp_path 
+        return temp_path
+    
+    def get_user_file(self, file_content):
+        pdf_path = "/tmp/temp.pdf"
+
+        with open(pdf_path, "wb") as f:
+            for chunk in file_content.iter_content():
+                f.write(chunk)
+        return pdf_path
+
         
     '''GPT支援URL，但有限制條件，例如...必須是http  or 可直接載入的圖片，不然就是要把圖片使用base 64 encode
     此process_image_file() function作用為將圖片轉換為base 64 編碼'''

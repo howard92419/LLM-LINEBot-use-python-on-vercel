@@ -161,26 +161,20 @@ def handle_image_message(event):
             TextSendMessage(text="圖片處理時發生錯誤，請稍後再試")
         )
 
-#處理PDF檔案
 @web_handler.add(MessageEvent, message=FileMessage)
 def handle_pdf_file(event):
     try:
         if event.message.type == "file":
             file_name = event.message.file_name
             file_size = event.message.file_size
-            # 確保是PDF文件
             if file_name.lower().endswith(".pdf"):
-                #下載PDF檔案
+                # 下載 PDF 檔案到 Vercel 的臨時目錄 /tmp
                 message_id = event.message.id
                 file_content = line_bot_api.get_message_content(message_id)
-                pdf_path = f"/path/to/save/{uuid.uuid4()}.pdf"  # 檔案儲存路徑
-                with open(pdf_path, "wb") as f:
-                    for chunk in file_content.iter_content():
-                        f.write(chunk)
+                pdf_path = chatgpt.get_user_file(file_content)
 
-                # 解析PDF檔案
+                # 解析 PDF 檔案
                 pdf_text = extract_text_from_pdf(pdf_path)
-                # 使用 OpenAI 處理PDF內容
                 response = chatgpt.get_response(pdf_text)
 
                 if not response:
