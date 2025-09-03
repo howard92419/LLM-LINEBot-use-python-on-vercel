@@ -1,6 +1,7 @@
 import os
 import io
 import requests
+import PyPDF2
 from api.llm import ChatGPT
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
@@ -158,6 +159,55 @@ def handle_image_message(event):
             event.reply_token,
             TextSendMessage(text="圖片處理時發生錯誤，請稍後再試")
         )
+
+#處理PDF檔案
+@web_handler.add(MessageEvent, message=TextMessage)
+def handle_pdf_file(event):
+    try:
+        if event.message.type == "file":
+            file_name = event.message.file_name
+            file_size = event.message.file_size
+            # 確保是PDF文件
+            if file_name.lower().endswith(".pdf"):
+                #下載PDF檔案
+                message_id = event.message.id
+                file_content = line_bot_api.get_message_content(message_id)
+                pdf_path = f"/path/to/save/{uuid.uuid4()}.pdf"  # 檔案儲存路徑
+                with open(pdf_path, "wb") as f:
+                    for chunk in file_content.iter_content():
+                        f.write(chunk)
+
+                # 解析PDF檔案
+                pdf_text = extract_text_from_pdf(pdf_path)
+                # 使用 OpenAI 處理PDF內容
+                response = chatgpt.get_response(pdf_text)
+
+                if not response:
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text="抱歉，我無法處理這個PDF檔案，請稍後再試。")
+                    )
+                    return
+
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=f"已處理你的PDF檔案：{response}")
+                )
+    except Exception as e:
+        print("[ERROR] PDF處理錯誤：", e)
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="PDF處理時發生錯誤，請稍後再試")
+        )
+
+# 解析 PDF 文件
+def extract_text_from_pdf(pdf_path):
+    with open(pdf_path, "rb") as file:
+        pdf_reader = PyPDF2.PdfReader(file)
+        text = ""
+        for page in pdf_reader.pages:
+            text += page.extract_text()
+    return text
 
 if __name__ == "__main__":
     app.run()
