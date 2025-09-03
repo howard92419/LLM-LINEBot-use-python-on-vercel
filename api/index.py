@@ -206,11 +206,18 @@ def extract_text_from_pdf(pdf_path):
     try:
         with pdfplumber.open(pdf_path) as pdf:
             text = ""
-            for page in pdf.pages:
-                text += page.extract_text() or ""
+            for page_num, page in enumerate(pdf.pages, 1):
+                try:
+                    page_text = page.extract_text()
+                    if page_text:
+                        text += page_text
+                    else:
+                        logging.warning(f"無法從第 {page_num} 頁提取文字，該頁可能是圖片或格式特殊")
+                except Exception as e:
+                    logging.error(f"解析第 {page_num} 頁時發生錯誤: {e}")
         return text
     except Exception as e:
-        print(f"PDF 解析錯誤: {e}")
+        logging.error(f"PDF 解析錯誤: {e}, 檔案路徑: {pdf_path}")
         return None
 
 if __name__ == "__main__":
