@@ -6,7 +6,7 @@ from api.llm import ChatGPT
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageMessage, ImageSendMessage, QuickReply, QuickReplyButton, MessageAction
+from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageMessage, ImageSendMessage, QuickReply, QuickReplyButton, MessageAction, FileMessage
 import logging
 import uuid
 
@@ -161,7 +161,7 @@ def handle_image_message(event):
         )
 
 #處理PDF檔案
-@web_handler.add(MessageEvent, message=TextMessage)
+@web_handler.add(MessageEvent, message=FileMessage)
 def handle_pdf_file(event):
     try:
         if event.message.type == "file":
