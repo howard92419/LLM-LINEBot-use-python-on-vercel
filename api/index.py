@@ -175,7 +175,12 @@ def handle_pdf_file(event):
 
                 # 解析 PDF 檔案
                 pdf_text = extract_text_from_pdf(pdf_path)
-                response = chatgpt.get_response(pdf_text)
+                
+                # 將 PDF 內容加入到對話紀錄中
+                chatgpt.add_msg(f"HUMAN: {pdf_text}")  
+
+                # 生成 GPT 回應
+                response = chatgpt.get_response()
 
                 if not response:
                     line_bot_api.reply_message(
