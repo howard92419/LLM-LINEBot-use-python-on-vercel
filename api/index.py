@@ -193,6 +193,8 @@ def handle_pdf_file(event):
                     event.reply_token,
                     TextSendMessage(text=f"{response}")
                 )
+
+                chatgpt.add_msg(f"AI: {response}")
     except Exception as e:
         print("[ERROR] PDF處理錯誤：", e)
         line_bot_api.reply_message(
