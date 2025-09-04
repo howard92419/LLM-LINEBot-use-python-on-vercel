@@ -14,7 +14,6 @@ import uuid
 line_bot_api = LineBotApi(os.getenv("LINE_CHANNEL_ACCESS_TOKEN"))
 web_handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET"))
 working_status = os.getenv("DEFALUT_TALKING", default="true").lower() == "true"
-global image_status
 image_status = False
 
 app = Flask(__name__)
@@ -89,7 +88,7 @@ def handle_message(event):
             )
             return
         
-        if event.message.test[:7] == "啟動讀取照片":
+        if event.message.test == "啟動讀取照片":
             image_status = True
             line_bot_api.reply_message(
                 event.reply_token,
