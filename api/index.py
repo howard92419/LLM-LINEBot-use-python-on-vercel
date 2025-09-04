@@ -15,8 +15,6 @@ line_bot_api = LineBotApi(os.getenv("LINE_CHANNEL_ACCESS_TOKEN"))
 web_handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET"))
 working_status = os.getenv("DEFALUT_TALKING", default="true").lower() == "true"
 
-global file_status
-
 app = Flask(__name__)
 chatgpt = ChatGPT()
 
@@ -116,7 +114,7 @@ def handle_message(event):
             file_status = False
             line_bot_api.reply_message(
                 event.reply_token,
-                 TextSendMessage(text="以關閉讀取文件功能")
+                TextSendMessage(text="以關閉讀取文件功能")
             )
             return
 
