@@ -15,6 +15,7 @@ line_bot_api = LineBotApi(os.getenv("LINE_CHANNEL_ACCESS_TOKEN"))
 web_handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET"))
 working_status = os.getenv("DEFALUT_TALKING", default="true").lower() == "true"
 image_status = False
+file_status = False
 
 app = Flask(__name__)
 chatgpt = ChatGPT()
@@ -102,6 +103,20 @@ def handle_message(event):
                 TextSendMessage(text="已關閉讀取照片功能")
             )
             return
+        if event.message.text[:7] == "啟動讀取文件":
+            file_status = True
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="已經可以讀取文件")
+            )
+            return
+        if event.message.text[:7] == "關閉讀取文件":
+            file_status = True
+            line_bot_api.reply_message(
+                event.reply_token,
+                 TextSendMessage(text="以關閉讀取文件功能")
+            )
+            return
 
         if working_status:
             question = event.message.text
@@ -186,6 +201,12 @@ def handle_image_message(event):
 
 @web_handler.add(MessageEvent, message=FileMessage)
 def handle_pdf_file(event):
+    if not file_status:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="檔案讀取功能目前尚未啟用。")
+        )
+        return
     try:
         if event.message.type == "file":
             file_name = event.message.file_name
