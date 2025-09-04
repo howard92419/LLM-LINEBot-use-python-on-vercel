@@ -14,8 +14,8 @@ import uuid
 line_bot_api = LineBotApi(os.getenv("LINE_CHANNEL_ACCESS_TOKEN"))
 web_handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET"))
 working_status = os.getenv("DEFALUT_TALKING", default="true").lower() == "true"
-image_status = False
-file_status = False
+
+global file_status
 
 app = Flask(__name__)
 chatgpt = ChatGPT()
@@ -90,6 +90,7 @@ def handle_message(event):
             return
         
         if event.message.text[:7] == "啟動讀取照片":
+            global image_status
             image_status = True
             line_bot_api.reply_message(
                 event.reply_token,
@@ -104,6 +105,7 @@ def handle_message(event):
             )
             return
         if event.message.text[:7] == "啟動讀取文件":
+            global file_status
             file_status = True
             line_bot_api.reply_message(
                 event.reply_token,
@@ -111,7 +113,7 @@ def handle_message(event):
             )
             return
         if event.message.text[:7] == "關閉讀取文件":
-            file_status = True
+            file_status = False
             line_bot_api.reply_message(
                 event.reply_token,
                  TextSendMessage(text="以關閉讀取文件功能")
