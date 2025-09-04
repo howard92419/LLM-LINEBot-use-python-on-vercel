@@ -118,43 +118,37 @@ def handle_message(event):
             )
             return
 
-        if working_status:
-            question = event.message.text
-            chatgpt.add_msg(f"HUMAN:{question}?\n")
-            response = chatgpt.get_response()
+        question = event.message.text
+        chatgpt.add_msg(f"HUMAN:{question}?\n")
+        response = chatgpt.get_response()
 
-            if not response:
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    TextSendMessage(text="抱歉，我沒收到有效的回應，請再試一次")
-                )
-                return
-            
-            #將對話加入GPT的聊天紀錄，GPT就可以知道聊天的前後文
-            reply_msg = response.replace("AI:", "", 1)
-            chatgpt.add_msg(f"AI:{reply_msg}\n")
-
-            questions = ["啟動讀取文件", "關閉讀取文件", "啟動讀取照片", "關閉讀取照片"]
-            quick_reply_buttons = [
-                QuickReplyButton(action=MessageAction(label=q, text=q))
-                for q in questions
-            ]
-
+        if not response:
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(
-                    text=reply_msg,
-                    quick_reply=QuickReply(items=quick_reply_buttons)
-                )
+                TextSendMessage(text="抱歉，我沒收到有效的回應，請再試一次")
             )
             return
+        
+        #將對話加入GPT的聊天紀錄，GPT就可以知道聊天的前後文
+        reply_msg = response.replace("AI:", "", 1)
+        chatgpt.add_msg(f"AI:{reply_msg}\n")
 
-        # 如果 AI 沒啟動，就告訴使用者
+        questions = ["啟動讀取文件", "關閉讀取文件", "啟動讀取照片", "關閉讀取照片"]
+        quick_reply_buttons = [
+            QuickReplyButton(action=MessageAction(label=q, text=q))
+            for q in questions
+        ]
+
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="AI 尚未啟動，請輸入「啟動」來開始使用。")
+            TextSendMessage(
+                text=reply_msg,
+                quick_reply=QuickReply(items=quick_reply_buttons)
+            )
         )
+        return
 
+        
     except Exception as e:
         import logging
         logging.exception("webhook 處理錯誤：")
