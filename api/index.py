@@ -95,7 +95,7 @@ def handle_message(event):
                 TextSendMessage(text="已可以讀取照片")
             )
             return
-        if event.meaage.text[:7] == "關閉讀取照片":
+        if event.message.text[:7] == "關閉讀取照片":
             image_status = False
             line_bot_api.reply_message(
                 event.reply_token,
