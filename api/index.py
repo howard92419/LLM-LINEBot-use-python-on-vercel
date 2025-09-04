@@ -90,7 +90,6 @@ def handle_message(event):
             return
         
         if event.message.test[:7] == "啟動讀取照片":
-            global image_status
             image_status = True
             line_bot_api.reply_message(
                 event.reply_token,
