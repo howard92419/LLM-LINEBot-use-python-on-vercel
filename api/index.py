@@ -141,35 +141,35 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text="發生錯誤，請稍後再試一次")
         )
-while image_status:
-    #這個裝飾器中，我處理的是圖片訊息，當user發送圖片時，handle_image_message這個函數會被呼叫
-    @web_handler.add(MessageEvent, message=ImageMessage)
-    def handle_image_message(event):
-        try:
-            #下載圖片
-            image_content = line_bot_api.get_message_content(event.message.id)
-            #儲存圖片
-            path = chatgpt.get_user_image(image_content)
-            #處理圖片並發送給 OpenAI 進行分析
-            reply_msg = chatgpt.process_image_file(path)
-            #回覆用戶
+
+#這個裝飾器中，我處理的是圖片訊息，當user發送圖片時，handle_image_message這個函數會被呼叫
+@web_handler.add(MessageEvent, message=ImageMessage)
+def handle_image_message(event):
+    try:
+        #下載圖片
+        image_content = line_bot_api.get_message_content(event.message.id)
+        #儲存圖片
+        path = chatgpt.get_user_image(image_content)
+        #處理圖片並發送給 OpenAI 進行分析
+        reply_msg = chatgpt.process_image_file(path)
+        #回覆用戶
             
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=f"{reply_msg}")
-            )
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=f"{reply_msg}")
+        )
             
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="請問你需要我幫你做什麼")
-            )
-            chatgpt.add_msg(f"AI:{reply_msg}\n")
-        except Exception as e:
-            print("[ERROR] 圖片處理錯誤：", e)
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="圖片處理時發生錯誤，請稍後再試")
-            )
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="請問你需要我幫你做什麼")
+        )
+        chatgpt.add_msg(f"AI:{reply_msg}\n")
+    except Exception as e:
+        print("[ERROR] 圖片處理錯誤：", e)
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="圖片處理時發生錯誤，請稍後再試")
+        )
 
 @web_handler.add(MessageEvent, message=FileMessage)
 def handle_pdf_file(event):
