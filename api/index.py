@@ -14,6 +14,8 @@ import uuid
 line_bot_api = LineBotApi(os.getenv("LINE_CHANNEL_ACCESS_TOKEN"))
 web_handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET"))
 working_status = os.getenv("DEFALUT_TALKING", default="true").lower() == "true"
+global image_status
+image_status = False
 
 app = Flask(__name__)
 chatgpt = ChatGPT()
