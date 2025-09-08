@@ -68,6 +68,7 @@ def handle_message(event):
                 TextSendMessage(text=f"我目前只懂文字訊息，你傳的是 {event.message.type}。")
             )
             return
+        #限制使用者輸入文字量(<600字)
         if len(event.message.text) < 600:
             # 以下處理純文字訊息
             if event.message.text[:3] == "啟動":                                                                                                    
