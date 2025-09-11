@@ -7,7 +7,7 @@ import base64
 client = OpenAI()
 
 client.api_key = os.getenv("OPENAI_API_KEY")
-gpt_model = "o4-mini-deep-research"
+gpt_model = "gpt-4o"
 
 class ChatGPT:
     """
