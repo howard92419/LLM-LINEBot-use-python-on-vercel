@@ -10,7 +10,7 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageMessage, ImageSendMessage, QuickReply, QuickReplyButton, MessageAction, FileMessage
 import logging
 import uuid
-import llm
+from api import llm
 
 line_bot_api = LineBotApi(os.getenv("LINE_CHANNEL_ACCESS_TOKEN"))
 web_handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET"))
