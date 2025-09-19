@@ -10,7 +10,6 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageMessage, ImageSendMessage, QuickReply, QuickReplyButton, MessageAction, FileMessage
 import logging
 import uuid
-from api import llm
 
 line_bot_api = LineBotApi(os.getenv("LINE_CHANNEL_ACCESS_TOKEN"))
 web_handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET"))
@@ -121,26 +120,26 @@ def handle_message(event):
                 )
                 return
             if event.message.text == "gpt-5-mini":
-                llm.change_model("gpt-5-mini")
+                chatgpt.change_model("gpt-5-mini")
                 line_bot_api.reply_message(
                     event.reply_token,
                     TextSendMessage(text = "已經切換到gpt-5-mini模型")
                 )
                 return
             if event.message.text == "gpt-5":
-                llm.change_model("gpt-5")
+                chatgpt.change_model("gpt-5")
                 line_bot_api.reply_message(
                     event.reply_token,
                     TextSendMessage(text = "已經切換到gpt-5")
                 )
             if event.message.text == "gpt-4.1":
-                llm.change_model("gpt-4.1")
+                chatgpt.change_model("gpt-4.1")
                 line_bot_api.reply_message(
                     event.reply_token,
                     TextSendMessage(text= "已經切換到gpt-4.1")
                 )
             if event.message.text == "o4-mini":
-                llm.change_model("o4-mini")
+                chatgpt.change_model("o4-mini")
                 line_bot_api.reply_message(
                     event.reply_token,
                     TextSendMessage(text = "已經切換到o4-mini")
