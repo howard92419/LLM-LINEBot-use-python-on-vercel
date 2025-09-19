@@ -7,7 +7,6 @@ import base64
 client = OpenAI()
 
 client.api_key = os.getenv("OPENAI_API_KEY")
-gpt_model = "gpt-4o"
 
 class ChatGPT:
     """
@@ -20,13 +19,16 @@ class ChatGPT:
     - max_tokens: an integer representing the maximum number of tokens to generate in a response
     """
 
-    def __init__(self):
+    def __init__(self, gpt_model = "gpt-4o"):
         self.prompt = Prompt()
         self.model = gpt_model
         self.temperature = float(os.getenv("OPENAI_TEMPERATURE", default=0))
         self.max_tokens = int(os.getenv("OPENAI_MAX_TOKENS", default=600))
         self.image_memory = []
 
+    def change_model(self, new_model):
+        self.model = new_model
+    
     def get_response(self):
         """
         Generates a response using OpenAI's GPT model.
