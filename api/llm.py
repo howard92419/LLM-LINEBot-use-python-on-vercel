@@ -86,7 +86,6 @@ class ChatGPT:
         self.add_msg("HUMAN: 我剛剛上傳了一張圖片，可以記住嗎？")
 
         response = client.chat.completions.create(
-            model=gpt_model,
             messages = [
                 {
                     "role": "user",
