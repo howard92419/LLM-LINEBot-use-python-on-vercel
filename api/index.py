@@ -51,40 +51,6 @@ def start_loading_animation(chat_id, loading_seconds):
 
 @web_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    buttons_template_message = TemplateSendMessage(
-        alt_text='This is a buttons template',
-        template=ButtonsTemplate(
-            thumbnail_image_url='https://ithelp.ithome.com.tw/storage/image/fight.svg',
-            imageAspectRatio='rectangle',
-            imageSize='cover',
-            imageBackgroundColor='#FFFFFF',
-            title='iThome鐵人2021',
-            text='Buttons template',
-            defaultAction=URIAction(
-                label='View detail',
-                uri='http://example.com/page/123'
-            ),
-            actions=[
-                PostbackAction(
-                    label='postback',
-                    display_text='postback text',
-                    data='action=buy&itemid=1'
-                ),
-                MessageAction(
-                    label='message',
-                    text='message text'
-                ),
-                URIAction(
-                    label='uri',
-                    uri='http://example.com/'
-                )
-            ]
-        )
-    )
-
-    # 發送按鈕模板訊息
-    line_bot_api.reply_message(event.reply_token, buttons_template_message)
-
     try:
         if event.message.type == "image":
             #在這支code裡，message_id也就代表image的id
@@ -105,6 +71,41 @@ def handle_message(event):
             return
         #限制使用者輸入文字量(<600字)
         if len(event.message.text) < 600:
+            
+            if event.message.text == "功能選單":
+                buttons_template_message = TemplateSendMessage(
+                    alt_text='This is a buttons template',
+                    template=ButtonsTemplate(
+                        thumbnail_image_url='https://ithelp.ithome.com.tw/storage/image/fight.svg',
+                        imageAspectRatio='rectangle',
+                        imageSize='cover',
+                        imageBackgroundColor='#FFFFFF',
+                        title='iThome鐵人2021',
+                        text='Buttons template',
+                        defaultAction=URIAction(
+                            label='View detail',
+                            uri='http://example.com/page/123'
+                        ),
+                        actions=[
+                            PostbackAction(
+                                label='postback',
+                                display_text='postback text',
+                                data='action=buy&itemid=1'
+                            ),
+                            MessageAction(
+                                label='message',
+                                text='message text'
+                            ),
+                            URIAction(
+                                label='uri',
+                                uri='http://example.com/'
+                            )
+                        ]
+                    )
+                )
+                # 發送按鈕模板訊息
+                line_bot_api.reply_message(event.reply_token, buttons_template_message)
+            
             # 以下處理純文字訊息
             if event.message.text[:3] == "啟動":                                                                                                    
                 global working_status
