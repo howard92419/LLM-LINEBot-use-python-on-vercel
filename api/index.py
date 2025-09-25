@@ -71,7 +71,7 @@ def handle_message(event):
             return
         #限制使用者輸入文字量(<600字)
         if len(event.message.text) < 600:
-            
+
             if event.message.text == "功能選單":
                 buttons_template_message = TemplateSendMessage(
                     alt_text='This is a buttons template',
@@ -80,25 +80,40 @@ def handle_message(event):
                         imageAspectRatio='rectangle',
                         imageSize='cover',
                         imageBackgroundColor='#FFFFFF',
-                        title='iThome鐵人2021',
-                        text='Buttons template',
+                        title='功能選單',
+                        text='請點選你要執行的功能',
                         defaultAction=URIAction(
                             label='View detail',
                             uri='http://example.com/page/123'
                         ),
                         actions=[
-                            PostbackAction(
-                                label='postback',
-                                display_text='postback text',
-                                data='action=buy&itemid=1'
+                            MessageAction(
+                                label='啟動讀取圖片',
+                                text='啟動讀取圖片'
                             ),
                             MessageAction(
-                                label='message',
-                                text='message text'
+                                label = '啟動讀取文件',
+                                text='啟動讀取文件'
                             ),
-                            URIAction(
-                                label='uri',
-                                uri='http://example.com/'
+                            MessageAction(
+                                label = 'gpt-5-mini',
+                                text='gpt-5-mini'
+                            ),
+                            MessageAction(
+                                label = 'gpt-5',
+                                text='gpt-5'
+                            ),
+                            MessageAction(
+                                label = 'gpt-4.1',
+                                text = 'gpt-4.1'
+                            ),
+                            MessageAction(
+                                label = 'gpt-4.1',
+                                text = 'gpt-4.1'
+                            ),
+                            MessageAction(
+                                label = 'o4-mini',
+                                text = 'o4-mini'
                             )
                         ]
                     )
@@ -124,12 +139,12 @@ def handle_message(event):
                 )
                 return
             
-            if event.message.text[:7] == "啟動讀取照片":
+            if event.message.text[:7] == "啟動讀取圖片":
                 global image_status
                 image_status = True
                 line_bot_api.reply_message(
                     event.reply_token,
-                    TextSendMessage(text="已可以讀取照片")
+                    TextSendMessage(text="已可以讀取圖片")
                 )
                 return
             if event.message.text[:7] == "關閉讀取照片":
@@ -167,18 +182,21 @@ def handle_message(event):
                     event.reply_token,
                     TextSendMessage(text = "已經切換到gpt-5")
                 )
+                return
             if event.message.text == "gpt-4.1":
                 chatgpt.change_model("gpt-4.1")
                 line_bot_api.reply_message(
                     event.reply_token,
                     TextSendMessage(text= "已經切換到gpt-4.1")
                 )
+                return
             if event.message.text == "o4-mini":
                 chatgpt.change_model("o4-mini")
                 line_bot_api.reply_message(
                     event.reply_token,
                     TextSendMessage(text = "已經切換到o4-mini")
                 )
+                return
 
             question = event.message.text
             chatgpt.add_msg(f"HUMAN:{question}?\n")
