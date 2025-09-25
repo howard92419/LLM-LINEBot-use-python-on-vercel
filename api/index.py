@@ -96,16 +96,8 @@ def handle_message(event):
                                 text='啟動讀取文件'
                             ),
                             MessageAction(
-                                label = 'gpt-5-mini',
-                                text='gpt-5-mini'
-                            ),
-                            MessageAction(
                                 label = 'gpt-5',
                                 text='gpt-5'
-                            ),
-                            MessageAction(
-                                label = 'gpt-4.1',
-                                text = 'gpt-4.1'
                             ),
                             MessageAction(
                                 label = 'gpt-4.1',
