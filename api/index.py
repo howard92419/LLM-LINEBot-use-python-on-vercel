@@ -98,6 +98,10 @@ def handle_message(event):
                             MessageAction(
                                 label = 'gpt-5',
                                 text='gpt-5'
+                            ),
+                            MessageAction(
+                                label = 'gpt-4.1',
+                                text = 'gpt-4.1'
                             )
                             
                         ]
