@@ -117,6 +117,10 @@ def handle_message(event):
                         ),
                         actions=[
                             MessageAction(
+                                label = 'gpt-5-mini',
+                                text = 'gpt-5-mini'
+                            ),
+                            MessageAction(
                                 label = 'gpt-5',
                                 text='gpt-5'
                             ),
@@ -127,10 +131,6 @@ def handle_message(event):
                             MessageAction(
                                 label = 'o4-mini',
                                 text = 'o4-mini'
-                            ),
-                            MessageAction(
-                                label = 'gpt-4o',
-                                text = 'gpt-4o'
                             )
                         ]
                     )
