@@ -59,7 +59,7 @@ def handle_message(event):
             # 回應文字確認收到圖片
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text=f"我收到你的圖片囉！（ID: {message_id}）")
+                TextSendMessage(text=f"我收到你的圖片囉！!（ID: {message_id}）")
             )
             return
 
