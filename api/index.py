@@ -94,7 +94,28 @@ def handle_message(event):
                             MessageAction(
                                 label = '啟動讀取文件',
                                 text='啟動讀取文件'
-                            ),
+                            )
+                        ]
+                    )
+                )
+                # 發送按鈕模板訊息
+                line_bot_api.reply_message(event.reply_token, buttons_template_message)
+                return
+            if event.message.text == "模型選單":
+                buttons_template_message = TemplateSendMessage(
+                    alt_text='This is a buttons template',
+                    template=ButtonsTemplate(
+                        thumbnail_image_url='https://ithelp.ithome.com.tw/storage/image/fight.svg',
+                        imageAspectRatio='rectangle',
+                        imageSize='cover',
+                        imageBackgroundColor='#FFFFFF',
+                        title='模型選單',
+                        text='請點選你換的模型',
+                        defaultAction=URIAction(
+                            label='View detail',
+                            uri='http://example.com/page/123'
+                        ),
+                        actions=[
                             MessageAction(
                                 label = 'gpt-5',
                                 text='gpt-5'
@@ -106,15 +127,17 @@ def handle_message(event):
                             MessageAction(
                                 label = 'o4-mini',
                                 text = 'o4-mini'
+                            ),
+                            MessageAction(
+                                label = 'gpt-4o',
+                                text = 'gpt-4o'
                             )
-                            
                         ]
                     )
                 )
                 # 發送按鈕模板訊息
                 line_bot_api.reply_message(event.reply_token, buttons_template_message)
                 return
-            
             # 以下處理純文字訊息
             if event.message.text[:3] == "啟動":                                                                                                    
                 global working_status
