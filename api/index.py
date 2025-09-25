@@ -7,7 +7,7 @@ from api.llm import ChatGPT
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageMessage, ImageSendMessage, QuickReply, QuickReplyButton, MessageAction, FileMessage
+from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageMessage, ImageSendMessage, QuickReply, QuickReplyButton, MessageAction, FileMessage, TemplateSendMessage, ButtonsTemplate, PostbackAction, MessageAction, URIAction
 import logging
 import uuid
 
@@ -51,6 +51,40 @@ def start_loading_animation(chat_id, loading_seconds):
 
 @web_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    buttons_template_message = TemplateSendMessage(
+        alt_text='This is a buttons template',
+        template=ButtonsTemplate(
+            thumbnail_image_url='https://ithelp.ithome.com.tw/storage/image/fight.svg',
+            imageAspectRatio='rectangle',
+            imageSize='cover',
+            imageBackgroundColor='#FFFFFF',
+            title='iThome鐵人2021',
+            text='Buttons template',
+            defaultAction=URIAction(
+                label='View detail',
+                uri='http://example.com/page/123'
+            ),
+            actions=[
+                PostbackAction(
+                    label='postback',
+                    display_text='postback text',
+                    data='action=buy&itemid=1'
+                ),
+                MessageAction(
+                    label='message',
+                    text='message text'
+                ),
+                URIAction(
+                    label='uri',
+                    uri='http://example.com/'
+                )
+            ]
+        )
+    )
+
+    # 發送按鈕模板訊息
+    line_bot_api.reply_message(event.reply_token, buttons_template_message)
+
     try:
         if event.message.type == "image":
             #在這支code裡，message_id也就代表image的id
