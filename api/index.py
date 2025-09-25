@@ -120,6 +120,7 @@ def handle_message(event):
                 )
                 # 發送按鈕模板訊息
                 line_bot_api.reply_message(event.reply_token, buttons_template_message)
+                return
             
             # 以下處理純文字訊息
             if event.message.text[:3] == "啟動":                                                                                                    
