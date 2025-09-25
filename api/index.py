@@ -76,7 +76,7 @@ def handle_message(event):
                 buttons_template_message = TemplateSendMessage(
                     alt_text='This is a buttons template',
                     template=ButtonsTemplate(
-                        thumbnail_image_url='https://ithelp.ithome.com.tw/storage/image/fight.svg',
+                        thumbnail_image_url='https://images.unsplash.com/photo-1592609931041-40265b692757?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                         imageAspectRatio='rectangle',
                         imageSize='cover',
                         imageBackgroundColor='#FFFFFF',
@@ -105,7 +105,7 @@ def handle_message(event):
                 buttons_template_message = TemplateSendMessage(
                     alt_text='This is a buttons template',
                     template=ButtonsTemplate(
-                        thumbnail_image_url='https://ithelp.ithome.com.tw/storage/image/fight.svg',
+                        thumbnail_image_url='https://images.unsplash.com/photo-1737894543912-7991b9070a33?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                         imageAspectRatio='rectangle',
                         imageSize='cover',
                         imageBackgroundColor='#FFFFFF',
